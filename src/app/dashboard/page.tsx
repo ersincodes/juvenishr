@@ -13,6 +13,7 @@ import { computeMetrics, filterRows } from "@/utils/metrics";
 import { format } from "date-fns";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { Skeleton, SkeletonCard, SkeletonText } from "@/components/Skeleton";
 
 type DateRange = { startDate: string; endDate: string };
 
@@ -209,9 +210,104 @@ const DashboardPage = () => {
 
       <div className="mx-auto max-w-7xl space-y-6 p-6">
         {loading ? (
-          <div className="rounded-lg border border-zinc-200 bg-white p-6 text-sm">
-            {t("dashboard.loading")}
-          </div>
+          <>
+            {/* Metrics skeleton */}
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="rounded-lg border border-zinc-200 bg-white p-4">
+                <SkeletonText rows={1} lineClassName="h-3 w-24" />
+                <div className="mt-2">
+                  <Skeleton
+                    className="h-6 w-24"
+                    aria-label="Loading total metric"
+                  />
+                </div>
+              </div>
+              <SkeletonCard
+                className="bg-white"
+                showAvatar={false}
+                titleRows={1}
+                bodyRows={4}
+                aria-label="Loading metrics breakdown"
+              />
+              <SkeletonCard
+                className="bg-white"
+                showAvatar={false}
+                titleRows={1}
+                bodyRows={4}
+                aria-label="Loading metrics breakdown"
+              />
+            </div>
+
+            {/* Filters & controls skeleton */}
+            <section
+              aria-label="Loading filters and columns"
+              className="grid grid-cols-1 items-end gap-4 lg:grid-cols-12">
+              <div className="lg:col-span-8">
+                <div className="rounded-lg border border-zinc-200 bg-white p-4">
+                  <SkeletonText rows={2} />
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {Array.from({ length: 6 }).map((_, i) => (
+                      <Skeleton
+                        key={i}
+                        className="h-8 w-20 rounded-full"
+                        aria-label="Loading filter chip"
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-end justify-end gap-3 lg:col-span-4">
+                <Skeleton
+                  className="h-10 w-48 rounded-md"
+                  aria-label="Loading date range picker"
+                />
+                <Skeleton
+                  className="h-10 w-40 rounded-md"
+                  aria-label="Loading columns button"
+                />
+              </div>
+            </section>
+
+            {/* Table skeleton */}
+            <div className="overflow-hidden rounded-lg border border-zinc-200 bg-white">
+              <div className="bg-zinc-50 px-3 py-2">
+                <div className="flex items-center gap-3">
+                  <Skeleton
+                    className="h-4 w-6"
+                    aria-label="Loading header index"
+                  />
+                  {Array.from({ length: 6 }).map((_, i) => (
+                    <Skeleton
+                      key={i}
+                      className="h-4 w-24"
+                      aria-label="Loading header column"
+                    />
+                  ))}
+                </div>
+              </div>
+              <div className="divide-y divide-zinc-100">
+                {Array.from({ length: 8 }).map((_, rowIdx) => (
+                  <div
+                    key={rowIdx}
+                    className={rowIdx % 2 === 0 ? "bg-white" : "bg-zinc-50/50"}>
+                    <div className="flex items-center gap-3 px-3 py-2">
+                      <Skeleton
+                        className="h-4 w-6"
+                        aria-label="Loading row index"
+                      />
+                      {Array.from({ length: 6 }).map((_, colIdx) => (
+                        <Skeleton
+                          key={colIdx}
+                          className="h-4 w-24"
+                          aria-label="Loading cell"
+                        />
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </>
         ) : error ? (
           <div
             role="alert"

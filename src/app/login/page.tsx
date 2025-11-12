@@ -99,7 +99,7 @@ const LoginPage = () => {
           aria-label={t("auth.login")}>
           {loading ? t("auth.loading") : t("auth.login")}
         </button>
-        <p className="text-sm text-zinc-600">
+        {/* <p className="text-sm text-zinc-600">
           {t("auth.noAccount")}{" "}
           <a
             href="/signup"
@@ -107,7 +107,7 @@ const LoginPage = () => {
             aria-label={t("auth.signup")}>
             {t("auth.signup")}
           </a>
-        </p>
+        </p> */}
       </form>
     </main>
   );
