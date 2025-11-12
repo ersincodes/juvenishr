@@ -1,20 +1,22 @@
 import { Metrics } from "@/utils/metrics";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   metrics: Metrics;
 };
 
 const MetricsBar = ({ metrics }: Props) => {
+  const { t } = useTranslation();
   return (
     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
       <div className="rounded-lg border border-zinc-200 bg-white p-4">
-        <div className="text-xs text-zinc-600">Total records</div>
+        <div className="text-xs text-zinc-600">{t("metrics.totalRecords")}</div>
         <div className="mt-1 text-2xl font-semibold">{metrics.total}</div>
       </div>
       {metrics.byKey ? (
         <div className="rounded-lg border border-zinc-200 bg-white p-4">
           <div className="text-xs text-zinc-600">
-            Counts by {metrics.byKey.key}
+            {t("metrics.countsBy", { key: metrics.byKey.key })}
           </div>
           <div className="mt-2 text-sm text-zinc-800 space-y-1">
             {Object.entries(metrics.byKey.counts)

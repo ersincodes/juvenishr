@@ -2,6 +2,7 @@
 
 import { SessionProvider } from "next-auth/react";
 import type { ReactNode } from "react";
+import "@/i18n";
 
 type ProvidersProps = {
   children: ReactNode;

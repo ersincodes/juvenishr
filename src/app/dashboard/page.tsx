@@ -11,6 +11,8 @@ import ColumnsMultiSelect from "@/components/ColumnsMultiSelect";
 import { RowData } from "@/types/data";
 import { computeMetrics, filterRows } from "@/utils/metrics";
 import { format } from "date-fns";
+import { useTranslation } from "react-i18next";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 type DateRange = { startDate: string; endDate: string };
 
@@ -50,6 +52,7 @@ const getDefaultRange = (): DateRange => {
 
 const DashboardPage = () => {
   const { data: session } = useSession();
+  const { t } = useTranslation();
   const [dateRange, setDateRange] = useState<DateRange>(getDefaultRange());
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -176,29 +179,30 @@ const DashboardPage = () => {
         <div className="flex items-center gap-3">
           <a
             href="/dashboard"
-            aria-label="Go to dashboard"
+            aria-label={t("dashboard.title")}
             className="flex items-center">
             <Image
               src="/asset/Juv.jpeg"
-              alt="Juvenis HR logo"
+              alt={t("logo.alt")}
               width={140}
               height={42}
               className="h-10 w-auto"
               priority
             />
           </a>
-          <h1 className="text-lg font-semibold">HR Reporting Dashboard</h1>
+          <h1 className="text-lg font-semibold">{t("dashboard.title")}</h1>
         </div>
         <div className="flex items-center gap-3">
           <span className="text-sm text-zinc-600">
-            {session?.user?.email ?? ""}
+            {session?.user?.name ?? ""}
           </span>
+          <LanguageSwitcher />
           <button
             type="button"
             onClick={() => signOut({ callbackUrl: "/login" })}
             className="rounded-md border border-zinc-300 px-3 py-1.5 text-sm hover:bg-zinc-100"
-            aria-label="Sign out">
-            Sign out
+            aria-label={t("auth.logout")}>
+            {t("auth.logout")}
           </button>
         </div>
       </header>
@@ -206,7 +210,7 @@ const DashboardPage = () => {
       <div className="mx-auto max-w-7xl space-y-6 p-6">
         {loading ? (
           <div className="rounded-lg border border-zinc-200 bg-white p-6 text-sm">
-            Loading…
+            {t("dashboard.loading")}
           </div>
         ) : error ? (
           <div
@@ -237,7 +241,7 @@ const DashboardPage = () => {
               onToggle={handleToggleColumn}
               onShowAll={handleShowAll}
               onHideAll={handleHideAll}
-              buttonLabel="Columns"
+              buttonLabel={t("dashboard.columns")}
             />
           </div>
         </section>

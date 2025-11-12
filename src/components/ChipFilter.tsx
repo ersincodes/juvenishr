@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { RowData } from "@/types/data";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   rows: RowData[];
@@ -11,6 +12,22 @@ type Props = {
 };
 
 const ChipFilter = ({ rows, activeFilters, onToggle, keys }: Props) => {
+  const { t } = useTranslation();
+  const COLUMN_LABEL_KEYS: Record<string, string> = {
+    Name: "col.name",
+    Phone: "col.phone",
+    City: "col.city",
+    Source: "col.source",
+    "Phone Status": "col.phoneStatus",
+    "F2F Status": "col.f2fStatus",
+    "Docs Status": "col.docsStatus",
+    "Job Status": "col.jobStatus",
+    Level: "col.level",
+    "Submitted At": "col.submittedAt",
+    Dealer: "col.dealer",
+  };
+  const getColLabel = (col: string) =>
+    COLUMN_LABEL_KEYS[col] ? t(COLUMN_LABEL_KEYS[col]) : col;
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
@@ -45,8 +62,13 @@ const ChipFilter = ({ rows, activeFilters, onToggle, keys }: Props) => {
   const filteredCandidates = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return candidates;
-    return candidates.filter((c) => c.toLowerCase().includes(q));
-  }, [candidates, query]);
+    return candidates.filter((c) => {
+      const labelKey = COLUMN_LABEL_KEYS[c];
+      const localized = labelKey ? t(labelKey) : c;
+      const label = localized.toLowerCase();
+      return c.toLowerCase().includes(q) || label.includes(q);
+    });
+  }, [candidates, query, t]);
 
   useEffect(() => {
     if (!selectedKey || !candidates.includes(selectedKey)) {
@@ -80,13 +102,13 @@ const ChipFilter = ({ rows, activeFilters, onToggle, keys }: Props) => {
         className="inline-flex items-center gap-2 rounded-full border border-zinc-300 bg-white px-4 py-2 text-sm text-zinc-800 hover:bg-zinc-100 disabled:opacity-50"
         aria-haspopup="dialog"
         aria-expanded={open}
-        aria-label="Ara ve Filtrele"
+        aria-label={t("filters.buttonLabel")}
         tabIndex={0}
         disabled={!candidates.length}
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") setOpen((v) => !v);
         }}>
-        <span>Ara ve Filtrele</span>
+        <span>{t("filters.buttonLabel")}</span>
         <svg
           className={`h-4 w-4 transition-transform ${open ? "rotate-180" : ""}`}
           viewBox="0 0 20 20"
@@ -99,7 +121,7 @@ const ChipFilter = ({ rows, activeFilters, onToggle, keys }: Props) => {
       {open && candidates.length ? (
         <div
           role="dialog"
-          aria-label="Filtreler"
+          aria-label={t("filters.dialogLabel")}
           className="absolute z-10 mt-2 w-[560px] overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-xl">
           <div className="border-b p-3">
             <div className="relative">
@@ -107,9 +129,9 @@ const ChipFilter = ({ rows, activeFilters, onToggle, keys }: Props) => {
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Ara ve Filtrele"
+                placeholder={t("filters.searchPlaceholder")}
                 className="w-full rounded-md border border-zinc-300 px-3 py-2 pr-9 text-sm outline-none focus:ring-2 focus:ring-zinc-900"
-                aria-label="Filtre başlıklarında ara"
+                aria-label={t("filters.searchPlaceholder")}
               />
               <svg
                 className="pointer-events-none absolute right-2 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500"
@@ -127,11 +149,11 @@ const ChipFilter = ({ rows, activeFilters, onToggle, keys }: Props) => {
           <div className="grid max-h-80 grid-cols-2">
             <div className="border-r">
               <div className="px-3 py-2 text-sm font-medium text-zinc-600">
-                Filtreler
+                {t("filters.dialogLabel")}
               </div>
               <ul
                 role="listbox"
-                aria-label="Filtre alanları"
+                aria-label={t("filters.listLabel")}
                 className="max-h-64 overflow-auto">
                 {filteredCandidates.map((key) => {
                   const isSelected = key === selectedKey;
@@ -147,14 +169,14 @@ const ChipFilter = ({ rows, activeFilters, onToggle, keys }: Props) => {
                             ? "bg-zinc-100 text-zinc-900"
                             : "text-zinc-800 hover:bg-zinc-50"
                         }`}>
-                        {key}
+                        {getColLabel(key)}
                       </button>
                     </li>
                   );
                 })}
                 {!filteredCandidates.length ? (
                   <li className="px-4 py-2 text-sm text-zinc-500">
-                    Sonuç bulunamadı
+                    {t("filters.noResults")}
                   </li>
                 ) : null}
               </ul>
@@ -163,7 +185,7 @@ const ChipFilter = ({ rows, activeFilters, onToggle, keys }: Props) => {
               {selectedKey ? (
                 <>
                   <div className="mb-2 text-xs font-medium text-zinc-600">
-                    {selectedKey} değerleri
+                    {t("filters.valuesFor", { key: getColLabel(selectedKey) })}
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {Array.from(valuesMap.get(selectedKey)?.entries() ?? [])
@@ -181,9 +203,7 @@ const ChipFilter = ({ rows, activeFilters, onToggle, keys }: Props) => {
                                 : "border-zinc-300 text-zinc-700 hover:bg-zinc-100"
                             }`}
                             aria-pressed={Boolean(selected)}
-                            aria-label={`${selectedKey} ${value} filtresini ${
-                              selected ? "kaldır" : "ekle"
-                            }`}>
+                            aria-label={`${selectedKey} ${value}`}>
                             {value}{" "}
                             <span className="opacity-60">({count})</span>
                           </button>
@@ -193,7 +213,7 @@ const ChipFilter = ({ rows, activeFilters, onToggle, keys }: Props) => {
                 </>
               ) : (
                 <div className="text-sm text-zinc-500">
-                  Bir filtre alanı seçin.
+                  {t("filters.selectAField")}
                 </div>
               )}
             </div>
@@ -203,8 +223,8 @@ const ChipFilter = ({ rows, activeFilters, onToggle, keys }: Props) => {
               type="button"
               onClick={() => setOpen(false)}
               className="rounded-md border border-zinc-300 px-3 py-1.5 text-sm hover:bg-zinc-100"
-              aria-label="Kapat">
-              Kapat
+              aria-label={t("common.close")}>
+              {t("common.close")}
             </button>
           </div>
         </div>
