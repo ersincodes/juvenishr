@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useSession, signOut } from "next-auth/react";
+import Image from "next/image";
 import DateRangePicker from "@/components/DateRangePicker";
 import ChipFilter from "@/components/ChipFilter";
 import MetricsBar from "@/components/MetricsBar";
@@ -172,7 +173,22 @@ const DashboardPage = () => {
   return (
     <main className="min-h-screen bg-zinc-50">
       <header className="sticky top-0 z-20 flex items-center justify-between border-b bg-white/95 px-6 py-3 backdrop-blur">
-        <h1 className="text-lg font-semibold">Reporting Dashboard</h1>
+        <div className="flex items-center gap-3">
+          <a
+            href="/dashboard"
+            aria-label="Go to dashboard"
+            className="flex items-center">
+            <Image
+              src="/asset/Juv.jpeg"
+              alt="Juvenis HR logo"
+              width={140}
+              height={42}
+              className="h-10 w-auto"
+              priority
+            />
+          </a>
+          <h1 className="text-lg font-semibold">HR Reporting Dashboard</h1>
+        </div>
         <div className="flex items-center gap-3">
           <span className="text-sm text-zinc-600">
             {session?.user?.email ?? ""}

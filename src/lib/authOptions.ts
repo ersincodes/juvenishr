@@ -1,54 +1,49 @@
 import type { NextAuthOptions } from "next-auth";
-import Credentials from "next-auth/providers/credentials";
+import CredentialsProvider from "next-auth/providers/credentials";
+import bcrypt from "bcryptjs";
 import { connectToDatabase } from "@/lib/db";
 import { UserModel } from "@/models/User";
-import bcrypt from "bcryptjs";
 
 export const authOptions: NextAuthOptions = {
   session: { strategy: "jwt" },
-  pages: {
-    signIn: "/login",
-  },
   providers: [
-    Credentials({
+    CredentialsProvider({
       name: "Credentials",
       credentials: {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          return null;
-        }
+      authorize: async (credentials) => {
+        const email = String(credentials?.email ?? "")
+          .toLowerCase()
+          .trim();
+        const password = String(credentials?.password ?? "");
+        if (!email || !password) return null;
+
         await connectToDatabase();
-        const user = await UserModel.findOne({
-          email: credentials.email.toLowerCase(),
-        }).lean();
+        const user = await UserModel.findOne({ email }).lean();
         if (!user) return null;
-        const isValid = await bcrypt.compare(
-          credentials.password,
-          user.passwordHash
-        );
-        if (!isValid) return null;
+        const valid = await bcrypt.compare(password, user.passwordHash);
+        if (!valid) return null;
+
         return {
           id: String(user._id),
+          name: user.name ?? null,
           email: user.email,
-          name: user.name ?? undefined,
         };
       },
     }),
   ],
+  pages: {
+    signIn: "/login",
+  },
   callbacks: {
     async jwt({ token, user }) {
-      if (user) {
-        token.sub = user.id;
-        token.email = user.email;
-        token.name = user.name;
-      }
+      if (user?.id) token.sub = user.id;
       return token;
     },
     async session({ session, token }) {
-      if (session.user && token?.sub) {
+      if (session.user && token.sub) {
         session.user.id = token.sub;
       }
       return session;

@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-const EXTERNAL_BASE = "https://www.juvenis.net/tr/jobjson/63kf52ur8x4rw7go";
 const DATE_DASHED = /^\d{4}-\d{2}-\d{2}$/;
 const DATE_COMPACT = /^\d{8}$/;
 
@@ -107,7 +106,15 @@ export async function GET(req: NextRequest) {
     );
   }
 
-  const url = `${EXTERNAL_BASE}/${startDate}/${endDate}`;
+  const externalBaseUrl = process.env.JUVENIS_JOBS_URL;
+  if (!externalBaseUrl) {
+    return NextResponse.json(
+      { error: "Server misconfiguration: JUVENIS_JOBS_URL is not set" },
+      { status: 500 }
+    );
+  }
+
+  const url = `${externalBaseUrl}/${startDate}/${endDate}`;
 
   try {
     const res = await fetch(url, { cache: "no-store" });

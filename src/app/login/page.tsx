@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 const LoginPage = () => {
   const router = useRouter();
@@ -34,6 +35,16 @@ const LoginPage = () => {
         onSubmit={handleSubmit}
         className="w-full max-w-md bg-white rounded-xl shadow p-6 space-y-4"
         aria-label="Login form">
+        <div className="flex justify-center">
+          <Image
+            src="/asset/Juv.jpeg"
+            alt="Juvenis HR logo"
+            width={160}
+            height={48}
+            priority
+            className="h-12 w-auto"
+          />
+        </div>
         <h1 className="text-2xl font-semibold text-zinc-900">Login</h1>
         {error ? (
           <div role="alert" className="text-sm text-red-600">
