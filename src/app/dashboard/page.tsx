@@ -5,11 +5,11 @@ import { useSession, signOut } from "next-auth/react";
 import Image from "next/image";
 import DateRangePicker from "@/components/DateRangePicker";
 import ChipFilter from "@/components/ChipFilter";
-import MetricsBar from "@/components/MetricsBar";
+import KpiCards from "@/components/KpiCards";
 import DataTable from "@/components/DataTable";
 import ColumnsMultiSelect from "@/components/ColumnsMultiSelect";
 import { RowData } from "@/types/data";
-import { computeMetrics, filterRows } from "@/utils/metrics";
+import { filterRows } from "@/utils/metrics";
 import { format } from "date-fns";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
@@ -169,10 +169,7 @@ const DashboardPage = () => {
     () => filterRows(rows, activeFilters),
     [rows, activeFilters]
   );
-  const metrics = useMemo(
-    () => computeMetrics(rows, activeFilters),
-    [rows, activeFilters]
-  );
+  // Derived KPI cards use filteredRows directly
 
   return (
     <main className="min-h-screen bg-zinc-50">
@@ -316,7 +313,7 @@ const DashboardPage = () => {
           </div>
         ) : null}
 
-        <MetricsBar metrics={metrics} />
+        <KpiCards rows={filteredRows} />
 
         <section
           aria-label="Filters and columns"

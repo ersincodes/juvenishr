@@ -29,6 +29,13 @@
   "metrics.totalRecords": "Toplam kayıt",
   "metrics.countsBy": "{{key}} dağılımı",
 
+  "kpi.sectionLabel": "KPI kartları",
+  "kpi.totalAndScheduledCardLabel": "Toplam ve Görüşme Ayarlandı",
+  "kpi.totalApplications": "Toplam kayıt",
+  "kpi.interviewScheduled": "Görüşme Ayarlandı",
+  "kpi.periodFilteredHint": "filtreye göre",
+  "kpi.scheduledOverTotalAria": "Görüşme Ayarlandı: {{count}} / {{total}} ({{percent}})",
+
   "daterange.dateRange": "Tarih aralığı",
   "daterange.select": "Tarih aralığı seç",
   "daterange.start": "Başlangıç",

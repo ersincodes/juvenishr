@@ -29,6 +29,13 @@
   "metrics.totalRecords": "Gesamtanzahl",
   "metrics.countsBy": "Anzahl nach {{key}}",
 
+  "kpi.sectionLabel": "KPI-Karten",
+  "kpi.totalAndScheduledCardLabel": "Gesamt und Termin Vereinbart",
+  "kpi.totalApplications": "Gesamtanträge",
+  "kpi.interviewScheduled": "Termin Vereinbart",
+  "kpi.periodFilteredHint": "gefiltert",
+  "kpi.scheduledOverTotalAria": "Termin vereinbart: {{count}} / {{total}} ({{percent}})",
+
   "daterange.dateRange": "Datumsbereich",
   "daterange.select": "Datumsbereich wählen",
   "daterange.start": "Start",
