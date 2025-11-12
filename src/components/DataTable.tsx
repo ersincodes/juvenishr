@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { RowData } from "@/types/data";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   rows: RowData[];
@@ -18,8 +19,22 @@ const DataTable = ({
   initialPageSize = 25,
   pageSizeOptions = [10, 25, 50, 100],
 }: Props) => {
+  const { t } = useTranslation();
   const [pageSize, setPageSize] = useState<number>(initialPageSize);
   const [page, setPage] = useState<number>(1); // 1-indexed for UX
+  const COLUMN_LABEL_KEYS: Record<string, string> = {
+    Name: "col.name",
+    Phone: "col.phone",
+    City: "col.city",
+    Source: "col.source",
+    "Phone Status": "col.phoneStatus",
+    "F2F Status": "col.f2fStatus",
+    "Docs Status": "col.docsStatus",
+    "Job Status": "col.jobStatus",
+    Level: "col.level",
+    "Submitted At": "col.submittedAt",
+    Dealer: "col.dealer",
+  };
 
   const allColumns = Object.keys(rows[0] ?? {});
   const columns = allColumns.filter((c) => visibleColumns.has(c));
@@ -53,7 +68,7 @@ const DataTable = ({
         <div
           className="rounded-lg border border-zinc-200 bg-white p-4 text-sm text-zinc-600"
           role="status">
-          No data for the selected range.
+          {t("table.noData")}
         </div>
       ) : (
         <>
@@ -64,7 +79,7 @@ const DataTable = ({
                   <th
                     scope="col"
                     className="whitespace-nowrap px-3 py-2 text-left font-semibold text-zinc-700"
-                    aria-label="Row number">
+                    aria-label={t("table.rowNumber")}>
                     #
                   </th>
                   {columns.map((col) => (
@@ -72,7 +87,7 @@ const DataTable = ({
                       key={col}
                       scope="col"
                       className="whitespace-nowrap px-3 py-2 text-left font-semibold text-zinc-700">
-                      {col}
+                      {COLUMN_LABEL_KEYS[col] ? t(COLUMN_LABEL_KEYS[col]) : col}
                     </th>
                   ))}
                 </tr>
@@ -99,11 +114,11 @@ const DataTable = ({
           <div className="mt-3 flex flex-col items-center justify-between gap-3 sm:flex-row">
             <div className="flex items-center gap-2">
               <label htmlFor="rows-per-page" className="text-sm text-zinc-700">
-                Rows per page
+                {t("table.rowsPerPage")}
               </label>
               <select
                 id="rows-per-page"
-                aria-label="Rows per page"
+                aria-label={t("table.rowsPerPage")}
                 className="rounded-md border border-zinc-300 bg-white px-2 py-1 text-sm outline-none focus:ring-2 focus:ring-zinc-900"
                 value={pageSize}
                 onChange={(e) => handlePageSizeChange(Number(e.target.value))}>
@@ -116,12 +131,12 @@ const DataTable = ({
             </div>
             <div className="flex items-center gap-3">
               <div className="text-sm text-zinc-600">
-                Showing{" "}
+                {t("table.showing")}{" "}
                 <span className="font-medium text-zinc-900">
                   {totalRows ? startIndex + 1 : 0}
                 </span>
                 –<span className="font-medium text-zinc-900">{endIndex}</span>{" "}
-                of{" "}
+                {t("table.of")}{" "}
                 <span className="font-medium text-zinc-900">{totalRows}</span>
               </div>
               <div className="flex items-center gap-2">
@@ -131,10 +146,10 @@ const DataTable = ({
                   disabled={clampedPage <= 1}
                   className="rounded-md border border-zinc-300 px-2 py-1 text-sm text-zinc-800 hover:bg-zinc-100 disabled:cursor-not-allowed disabled:opacity-50"
                   aria-label="Previous page">
-                  Prev
+                  {t("table.prev")}
                 </button>
                 <span className="min-w-[80px] text-center text-sm text-zinc-700">
-                  Page{" "}
+                  {t("table.page")}{" "}
                   <span className="font-medium text-zinc-900">
                     {clampedPage}
                   </span>{" "}
@@ -149,7 +164,7 @@ const DataTable = ({
                   disabled={clampedPage >= totalPages}
                   className="rounded-md border border-zinc-300 px-2 py-1 text-sm text-zinc-800 hover:bg-zinc-100 disabled:cursor-not-allowed disabled:opacity-50"
                   aria-label="Next page">
-                  Next
+                  {t("table.next")}
                 </button>
               </div>
             </div>

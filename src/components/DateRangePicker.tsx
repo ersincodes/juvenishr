@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 type DateRange = {
   startDate: string;
@@ -39,6 +40,7 @@ const DateRangePicker = ({ value, onChange, maxRangeDays }: Props) => {
   const [open, setOpen] = useState(false);
   const [draft, setDraft] = useState<DateRange>(value);
   const [error, setError] = useState<string | null>(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     setDraft(value);
@@ -70,7 +72,7 @@ const DateRangePicker = ({ value, onChange, maxRangeDays }: Props) => {
 
   const handleApply = () => {
     if (!draft.startDate || !draft.endDate) {
-      setError("Please select a start and end date.");
+      setError(t("daterange.error.selectBoth"));
       return;
     }
     if (maxRangeDays) {
@@ -80,7 +82,7 @@ const DateRangePicker = ({ value, onChange, maxRangeDays }: Props) => {
         (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)
       );
       if (diff > maxRangeDays) {
-        setError(`Select at most ${maxRangeDays} days.`);
+        setError(t("daterange.error.maxDays", { days: maxRangeDays }));
         return;
       }
     }
@@ -118,12 +120,12 @@ const DateRangePicker = ({ value, onChange, maxRangeDays }: Props) => {
       ? `${formatIsoAsDotted(value.startDate)} — ${formatIsoAsDotted(
           value.endDate
         )}`
-      : "Select date range";
+      : t("daterange.select");
 
   return (
     <div className="relative" ref={rootRef}>
       <label htmlFor={inputId} className="block">
-        <span className="block text-xs text-zinc-600">Date range</span>
+        <span className="block text-xs text-zinc-600">{t("daterange.dateRange")}</span>
         <button
           id={inputId}
           type="button"
@@ -131,7 +133,7 @@ const DateRangePicker = ({ value, onChange, maxRangeDays }: Props) => {
           onKeyDown={handleKeyDown}
           aria-haspopup="dialog"
           aria-expanded={open}
-          aria-label="Select date range"
+          aria-label={t("daterange.select")}
           tabIndex={0}
           className="mt-1 inline-flex w-[280px] items-center justify-between rounded-md border border-zinc-300 bg-white px-3 py-2 text-left text-sm text-zinc-800 hover:bg-zinc-50 focus:outline-none focus:ring-2 focus:ring-zinc-900">
           <span className="truncate">{display}</span>
@@ -148,11 +150,11 @@ const DateRangePicker = ({ value, onChange, maxRangeDays }: Props) => {
       {open ? (
         <div
           role="dialog"
-          aria-label="Date range selector"
+          aria-label={t("daterange.dateRange")}
           className="absolute z-10 mt-2 w-[420px] overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-xl">
           <div className="grid gap-3 p-3 sm:grid-cols-2">
             <label className="block">
-              <span className="block text-xs text-zinc-600">Start date</span>
+              <span className="block text-xs text-zinc-600">{t("daterange.start")}</span>
               <input
                 type="date"
                 value={draft.startDate}
@@ -161,11 +163,11 @@ const DateRangePicker = ({ value, onChange, maxRangeDays }: Props) => {
                   setDraft((prev) => ({ ...prev, startDate: e.target.value }))
                 }
                 className="mt-1 w-full rounded-md border border-zinc-300 px-3 py-2 outline-none focus:ring-2 focus:ring-zinc-900"
-                aria-label="Start date"
+                aria-label={t("daterange.start")}
               />
             </label>
             <label className="block">
-              <span className="block text-xs text-zinc-600">End date</span>
+              <span className="block text-xs text-zinc-600">{t("daterange.end")}</span>
               <input
                 type="date"
                 value={draft.endDate}
@@ -174,43 +176,43 @@ const DateRangePicker = ({ value, onChange, maxRangeDays }: Props) => {
                   setDraft((prev) => ({ ...prev, endDate: e.target.value }))
                 }
                 className="mt-1 w-full rounded-md border border-zinc-300 px-3 py-2 outline-none focus:ring-2 focus:ring-zinc-900"
-                aria-label="End date"
+                aria-label={t("daterange.end")}
               />
             </label>
           </div>
 
           <div className="border-t p-3">
             <div className="mb-2 text-xs font-medium text-zinc-600">
-              Quick presets
+              {t("daterange.quickPresets")}
             </div>
             <div className="flex flex-wrap gap-2">
               <button
                 type="button"
                 onClick={() => handlePreset(7)}
                 className="rounded-md border border-zinc-300 px-2 py-1 text-xs hover:bg-zinc-100"
-                aria-label="Last 7 days">
-                Last 7 days
+                aria-label={t("daterange.last7")}>
+                {t("daterange.last7")}
               </button>
               <button
                 type="button"
                 onClick={() => handlePreset(14)}
                 className="rounded-md border border-zinc-300 px-2 py-1 text-xs hover:bg-zinc-100"
-                aria-label="Last 14 days">
-                Last 14 days
+                aria-label={t("daterange.last14")}>
+                {t("daterange.last14")}
               </button>
               <button
                 type="button"
                 onClick={() => handlePreset(30)}
                 className="rounded-md border border-zinc-300 px-2 py-1 text-xs hover:bg-zinc-100"
-                aria-label="Last 30 days">
-                Last 30 days
+                aria-label={t("daterange.last30")}>
+                {t("daterange.last30")}
               </button>
               <button
                 type="button"
                 onClick={handleClear}
                 className="rounded-md border border-zinc-300 px-2 py-1 text-xs hover:bg-zinc-100"
-                aria-label="Reset to last 7 days">
-                Reset
+                aria-label={t("daterange.reset")}>
+                {t("daterange.reset")}
               </button>
             </div>
           </div>
@@ -226,15 +228,15 @@ const DateRangePicker = ({ value, onChange, maxRangeDays }: Props) => {
               type="button"
               onClick={() => setOpen(false)}
               className="rounded-md border border-zinc-300 px-3 py-1.5 text-sm hover:bg-zinc-100"
-              aria-label="Cancel">
-              Cancel
+              aria-label={t("daterange.cancel")}>
+              {t("daterange.cancel")}
             </button>
             <button
               type="button"
               onClick={handleApply}
               className="rounded-md border border-zinc-900 bg-zinc-900 px-3 py-1.5 text-sm text-white hover:bg-zinc-800"
-              aria-label="Apply">
-              Apply
+              aria-label={t("daterange.apply")}>
+              {t("daterange.apply")}
             </button>
           </div>
         </div>
