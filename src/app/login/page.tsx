@@ -33,19 +33,30 @@ const LoginPage = () => {
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-zinc-50">
+    <main className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <div className="absolute inset-0 -z-10">
+        <Image
+          src="/asset/cc-bg.jpg"
+          alt=""
+          aria-hidden="true"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover opacity-15"
+        />
+      </div>
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-md bg-white rounded-xl shadow p-6 space-y-4"
         aria-label={t("auth.login") + " form"}>
         <div className="flex justify-center">
           <Image
-            src="/asset/Juv.jpeg"
+            src="/asset/Juv-text.jpg"
             alt={t("logo.alt")}
-            width={160}
-            height={48}
+            width={500}
+            height={96}
             priority
-            className="h-12 w-auto"
+            className="h-20 sm:h-24 md:h-28 lg:h-32 xl:h-40 w-auto object-contain"
           />
         </div>
         <div className="flex items-center justify-between">

@@ -4,6 +4,20 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { RowData } from "@/types/data";
 import { useTranslation } from "react-i18next";
 
+const COLUMN_LABEL_KEYS: Record<string, string> = {
+  Name: "col.name",
+  Phone: "col.phone",
+  City: "col.city",
+  Source: "col.source",
+  "Phone Status": "col.phoneStatus",
+  "F2F Status": "col.f2fStatus",
+  "Docs Status": "col.docsStatus",
+  "Job Status": "col.jobStatus",
+  Level: "col.level",
+  "Submitted At": "col.submittedAt",
+  Dealer: "col.dealer",
+};
+
 type Props = {
   rows: RowData[];
   activeFilters: Record<string, Set<string>>;
@@ -13,19 +27,6 @@ type Props = {
 
 const ChipFilter = ({ rows, activeFilters, onToggle, keys }: Props) => {
   const { t } = useTranslation();
-  const COLUMN_LABEL_KEYS: Record<string, string> = {
-    Name: "col.name",
-    Phone: "col.phone",
-    City: "col.city",
-    Source: "col.source",
-    "Phone Status": "col.phoneStatus",
-    "F2F Status": "col.f2fStatus",
-    "Docs Status": "col.docsStatus",
-    "Job Status": "col.jobStatus",
-    Level: "col.level",
-    "Submitted At": "col.submittedAt",
-    Dealer: "col.dealer",
-  };
   const getColLabel = (col: string) =>
     COLUMN_LABEL_KEYS[col] ? t(COLUMN_LABEL_KEYS[col]) : col;
   const [open, setOpen] = useState(false);
@@ -59,7 +60,7 @@ const ChipFilter = ({ rows, activeFilters, onToggle, keys }: Props) => {
     return map;
   }, [rows, candidates]);
 
-  const filteredCandidates = useMemo(() => {
+  const filteredCandidates = (() => {
     const q = query.trim().toLowerCase();
     if (!q) return candidates;
     return candidates.filter((c) => {
@@ -68,13 +69,12 @@ const ChipFilter = ({ rows, activeFilters, onToggle, keys }: Props) => {
       const label = localized.toLowerCase();
       return c.toLowerCase().includes(q) || label.includes(q);
     });
-  }, [candidates, query, t]);
+  })();
 
-  useEffect(() => {
-    if (!selectedKey || !candidates.includes(selectedKey)) {
-      setSelectedKey(candidates[0] ?? null);
-    }
-  }, [candidates, selectedKey]);
+  const effectiveSelectedKey = useMemo(() => {
+    if (selectedKey && candidates.includes(selectedKey)) return selectedKey;
+    return candidates[0] ?? null;
+  }, [selectedKey, candidates]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -156,7 +156,7 @@ const ChipFilter = ({ rows, activeFilters, onToggle, keys }: Props) => {
                 aria-label={t("filters.listLabel")}
                 className="max-h-64 overflow-auto">
                 {filteredCandidates.map((key) => {
-                  const isSelected = key === selectedKey;
+                  const isSelected = key === effectiveSelectedKey;
                   return (
                     <li key={key}>
                       <button
@@ -181,29 +181,37 @@ const ChipFilter = ({ rows, activeFilters, onToggle, keys }: Props) => {
                 ) : null}
               </ul>
             </div>
-            <div className="p-3">
-              {selectedKey ? (
+            <div className="flex min-h-0 max-h-64 flex-col p-3">
+              {effectiveSelectedKey ? (
                 <>
                   <div className="mb-2 text-xs font-medium text-zinc-600">
-                    {t("filters.valuesFor", { key: getColLabel(selectedKey) })}
+                    {t("filters.valuesFor", {
+                      key: getColLabel(effectiveSelectedKey),
+                    })}
                   </div>
-                  <div className="flex flex-wrap gap-2">
-                    {Array.from(valuesMap.get(selectedKey)?.entries() ?? [])
+                  <div className="flex flex-wrap gap-2 overflow-auto pr-1">
+                    {Array.from(
+                      valuesMap.get(effectiveSelectedKey)?.entries() ?? []
+                    )
                       .sort((a, b) => b[1] - a[1])
                       .map(([value, count]) => {
-                        const selected = activeFilters[selectedKey]?.has(value);
+                        const selected =
+                          activeFilters[effectiveSelectedKey]?.has(value);
                         return (
                           <button
                             key={value}
                             type="button"
-                            onClick={() => onToggle(selectedKey, value)}
+                            onClick={() =>
+                              effectiveSelectedKey &&
+                              onToggle(effectiveSelectedKey, value)
+                            }
                             className={`rounded-full border px-3 py-1 text-xs ${
                               selected
                                 ? "bg-zinc-900 text-white border-zinc-900"
                                 : "border-zinc-300 text-zinc-700 hover:bg-zinc-100"
                             }`}
                             aria-pressed={Boolean(selected)}
-                            aria-label={`${selectedKey} ${value}`}>
+                            aria-label={`${effectiveSelectedKey} ${value}`}>
                             {value}{" "}
                             <span className="opacity-60">({count})</span>
                           </button>
