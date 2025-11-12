@@ -7,10 +7,10 @@ Setup:
 1. Configure environment variables (create `.env.local`):
 
 ```
-MONGODB_URI=mongodb://127.0.0.1:27017/juvenishr
-MONGODB_DB=juvenishr
+MONGODB_URI=*****
+MONGODB_DB=*****
 NEXTAUTH_SECRET=replace-with-a-long-random-string
-NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_URL=****
 ```
 
 2. Install deps and run the development server:
