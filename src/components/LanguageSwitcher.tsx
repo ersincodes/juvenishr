@@ -25,6 +25,10 @@ const LanguageSwitcher = () => {
     i18n.changeLanguage(lng).catch(() => {});
     try {
       localStorage.setItem("app:lng", lng);
+      // also persist in cookie so server can read on next request
+      document.cookie = `app_lng=${encodeURIComponent(
+        lng
+      )}; Max-Age=31536000; Path=/; SameSite=Lax`;
     } catch {
       // ignore
     }

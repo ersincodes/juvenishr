@@ -22,7 +22,7 @@
   "auth.failedSignup": "Registrierung fehlgeschlagen",
   "auth.fullName": "Vollständiger Name",
 
-  "dashboard.title": "HR Reporting-Dashboard",
+  "dashboard.title": "HR Bewerber-Tracking-System",
   "dashboard.columns": "Spalten",
   "dashboard.loading": "Laden…",
 
@@ -80,7 +80,7 @@
   "col.docsStatus": "Dokumentenstatus",
   "col.jobStatus": "Jobstatus",
   "col.level": "Stufe",
-  "col.submittedAt": "Eingereicht am",
+  "col.submittedAt": "Antragsdatum",
   "col.dealer": "Händler",
   "col.phoneDate": "Telefondatum",
   "col.f2fDate": "F2F-Datum",
