@@ -14,10 +14,6 @@ Users can sign up, log in, view dashboards, and customize which columns to displ
   - Session persistence (via Clerk or NextAuth)
 
 - **Dynamic Data Fetching**
-  - Data is fetched from:
-    ```
-    https://juvenis.net/tr/jobjson/63kf52ur8x4rw7go/${startDate}/${endDate}
-    ```
   - Controlled by user’s selected date range
   - Server-side proxy API for validation and transformation
 
