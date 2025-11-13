@@ -1,38 +1,72 @@
-This is a Reporting Dashboard built with Next.js, Tailwind, NextAuth, and MongoDB.
+# 🧭 Reporting Dashboard
 
-## Getting Started
+A full-stack reporting dashboard built with **Next.js (latest)** and **MongoDB**, designed to visualize and analyze data fetched from an external API within a selected date range.  
 
-Setup:
+Users can sign up, log in, view dashboards, and customize which columns to display in a data table — preferences are saved per user.
 
-1. Configure environment variables (create `.env.local`):
+---
 
-```
-MONGODB_URI=*****
-MONGODB_DB=*****
-NEXTAUTH_SECRET=replace-with-a-long-random-string
-NEXTAUTH_URL=****
-```
+## 🚀 Features
 
-2. Install deps and run the development server:
+- **User Authentication**
+  - Sign up / login flow
+  - Protected dashboard route
+  - Session persistence (via Clerk or NextAuth)
+
+- **Dynamic Data Fetching**
+  - Data is fetched from:
+    ```
+    https://juvenis.net/tr/jobjson/63kf52ur8x4rw7go/${startDate}/${endDate}
+    ```
+  - Controlled by user’s selected date range
+  - Server-side proxy API for validation and transformation
+
+- **Interactive Dashboard**
+  - KPI widgets with real-time calculations
+  - Filterable and sortable data table
+  - Column visibility toggle — user can choose which columns to display
+  - Date range selector and chip filters for quick filtering
+  - User preferences (visible columns, filters) saved to MongoDB
+
+- **User Settings**
+  - Each user’s dashboard layout and visible columns persist across sessions
+
+- **Responsive Design**
+  - Fully responsive layout built with Tailwind CSS
+  - Optimized for both desktop and mobile
+
+---
+
+## 🧩 Tech Stack
+
+| Layer | Technology |
+|-------|-------------|
+| Frontend | [Next.js (latest)](https://nextjs.org/) |
+| Styling | [Tailwind CSS](https://tailwindcss.com/) |
+| Auth | [Clerk](https://clerk.com/) or [NextAuth.js](https://next-auth.js.org/) |
+| Database | [MongoDB](https://www.mongodb.com/) |
+| ORM / ODM | [Mongoose](https://mongoosejs.com/) or [Prisma](https://www.prisma.io/) |
+| Charts | [Recharts](https://recharts.org/) or [Chart.js](https://www.chartjs.org/) |
+| Data Table | [Mantine DataTable](https://mantine.dev/) or [TanStack Table](https://tanstack.com/table) |
+
+---
+
+## 🧠 Architecture Overview
+
+1. **Client** selects a date range and triggers data fetch.
+2. **Server API Route** (`/api/jobs`) validates and requests data from the external API.
+3. The **backend** caches or transforms the result (optional) and returns it to the frontend.
+4. **Frontend Dashboard** displays:
+   - KPI widgets
+   - Data table (filterable, customizable)
+   - Column preferences saved per user (`/api/users/:userId/settings`)
+
+---
+
+## 📦 Project Setup
+
+### 1️⃣ Clone the repository
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) to access the app.
-
-Auth pages: `/login`, `/signup`. Protected dashboard: `/dashboard`.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Notes
-
-- Data is fetched via server route `/api/jobs?startDate=YYYY-MM-DD&endDate=YYYY-MM-DD` which proxies `https://juvenis.net/tr/jobjson/63kf52ur8x4rw7go/${startDate}/${endDate}`.
-- Column visibility is persisted per user at `/api/users/:userId/settings`.
-- Set your `MONGODB_URI` before running.
+git clone https://github.com/yourusername/reporting-dashboard.git
+cd reporting-dashboard
