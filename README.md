@@ -11,7 +11,7 @@ Users can sign up, log in, view dashboards, and customize which columns to displ
 - **User Authentication**
   - Sign up / login flow
   - Protected dashboard route
-  - Session persistence (via Clerk or NextAuth)
+  - Session persistence (NextAuth)
 
 - **Dynamic Data Fetching**
   - Controlled by user’s selected date range
