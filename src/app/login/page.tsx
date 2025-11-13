@@ -59,12 +59,12 @@ const LoginPage = () => {
             className="h-20 sm:h-24 md:h-28 lg:h-32 xl:h-40 w-auto object-contain"
           />
         </div>
-        <div className="flex items-center justify-between">
+        {/*  <div className="flex items-center justify-between">
           <h1 className="text-2xl font-semibold text-zinc-900">
             {t("auth.login")}
           </h1>
           <LanguageSwitcher />
-        </div>
+        </div> */}
         {error ? (
           <div role="alert" className="text-sm text-red-600">
             {error}

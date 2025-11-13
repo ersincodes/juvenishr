@@ -43,10 +43,6 @@ const DateRangePicker = ({ value, onChange, maxRangeDays }: Props) => {
   const { t } = useTranslation();
 
   useEffect(() => {
-    setDraft(value);
-  }, [value.startDate, value.endDate]);
-
-  useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (!rootRef.current) return;
       if (e.target instanceof Node && !rootRef.current.contains(e.target)) {
@@ -78,10 +74,9 @@ const DateRangePicker = ({ value, onChange, maxRangeDays }: Props) => {
     if (maxRangeDays) {
       const start = new Date(draft.startDate + "T00:00:00");
       const end = new Date(draft.endDate + "T00:00:00");
-      const diff = Math.ceil(
-        (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)
-      );
-      if (diff > maxRangeDays) {
+      const diffMs = end.getTime() - start.getTime();
+      const inclusiveDays = Math.floor(diffMs / (1000 * 60 * 60 * 24)) + 1;
+      if (inclusiveDays > maxRangeDays) {
         setError(t("daterange.error.maxDays", { days: maxRangeDays }));
         return;
       }
@@ -124,8 +119,7 @@ const DateRangePicker = ({ value, onChange, maxRangeDays }: Props) => {
 
   return (
     <div className="relative" ref={rootRef}>
-      <label htmlFor={inputId} className="block">
-        <span className="block text-xs text-zinc-600">{t("daterange.dateRange")}</span>
+      <div className="block">
         <button
           id={inputId}
           type="button"
@@ -145,7 +139,7 @@ const DateRangePicker = ({ value, onChange, maxRangeDays }: Props) => {
             <path d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zM18 9H2v7a2 2 0 002 2h12a2 2 0 002-2V9z" />
           </svg>
         </button>
-      </label>
+      </div>
 
       {open ? (
         <div
@@ -154,7 +148,9 @@ const DateRangePicker = ({ value, onChange, maxRangeDays }: Props) => {
           className="absolute z-10 mt-2 w-[420px] overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-xl">
           <div className="grid gap-3 p-3 sm:grid-cols-2">
             <label className="block">
-              <span className="block text-xs text-zinc-600">{t("daterange.start")}</span>
+              <span className="block text-xs text-zinc-600">
+                {t("daterange.start")}
+              </span>
               <input
                 type="date"
                 value={draft.startDate}
@@ -167,7 +163,9 @@ const DateRangePicker = ({ value, onChange, maxRangeDays }: Props) => {
               />
             </label>
             <label className="block">
-              <span className="block text-xs text-zinc-600">{t("daterange.end")}</span>
+              <span className="block text-xs text-zinc-600">
+                {t("daterange.end")}
+              </span>
               <input
                 type="date"
                 value={draft.endDate}

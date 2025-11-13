@@ -221,7 +221,7 @@ const DashboardPage = () => {
 
             <section
               aria-label="Filters and columns"
-              className="grid grid-cols-1 items-end gap-4 lg:grid-cols-12">
+              className="mt-6 border-t border-zinc-200 pt-6 grid grid-cols-1 items-end gap-4 lg:grid-cols-12">
               <div className="lg:col-span-8">
                 <ChipFilter
                   rows={rows}
@@ -285,7 +285,7 @@ const DashboardPage = () => {
               {/* Filters & controls skeleton */}
               <section
                 aria-label="Loading filters and columns"
-                className="grid grid-cols-1 items-end gap-4 lg:grid-cols-12">
+                className="mt-6 border-t border-zinc-200 pt-6 grid grid-cols-1 items-end gap-4 lg:grid-cols-12">
                 <div className="lg:col-span-8">
                   <div className="rounded-lg border border-zinc-200 bg-white p-4">
                     <SkeletonText rows={2} />
