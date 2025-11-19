@@ -23,6 +23,8 @@
   "auth.fullName": "Ad Soyad",
 
   "dashboard.title": "İK Başvuru Takip Sistemi",
+  "dashboard.tabs.dashboard": "Genel Bakış",
+  "dashboard.tabs.interviews": "Görüşmeler",
   "dashboard.columns": "Sütunlar",
   "dashboard.loading": "Yükleniyor…",
 
@@ -44,6 +46,13 @@
   "kpi.topCitiesCardLabel": "Şehirler",
   "kpi.topCities": "En Fazla Başvuran 3 Şehir",
   "kpi.cityItemAria": "{{city}}: {{count}} ({{percent}})",
+
+  "kpi.todayInterviews": "Bugünkü Görüşmeler",
+  "kpi.weekInterviews": "Bu Hafta",
+  "kpi.monthInterviews": "Bu Ay",
+  "kpi.yearInterviews": "Bu Yıl",
+  "kpi.scheduledCount": "Ayarlanan Görüşme",
+  "kpi.noInterviewsToday": "Bugün görüşme yok",
 
   "daterange.dateRange": "Tarih aralığı",
   "daterange.select": "Tarih aralığı seç",

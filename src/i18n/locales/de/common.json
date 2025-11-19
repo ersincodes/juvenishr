@@ -23,6 +23,8 @@
   "auth.fullName": "Vollständiger Name",
 
   "dashboard.title": "HR Bewerber-Tracking-System",
+  "dashboard.tabs.dashboard": "Übersicht",
+  "dashboard.tabs.interviews": "Interviews",
   "dashboard.columns": "Spalten",
   "dashboard.loading": "Laden…",
 
@@ -44,6 +46,13 @@
   "kpi.topCitiesCardLabel": "Städte",
   "kpi.topCities": "Top 3 Städte",
   "kpi.cityItemAria": "{{city}}: {{count}} ({{percent}})",
+
+  "kpi.todayInterviews": "Heutige Interviews",
+  "kpi.weekInterviews": "Diese Woche",
+  "kpi.monthInterviews": "Diesen Monat",
+  "kpi.yearInterviews": "Dieses Jahr",
+  "kpi.scheduledCount": "Geplante Interviews",
+  "kpi.noInterviewsToday": "Keine Interviews heute",
 
   "daterange.dateRange": "Datumsbereich",
   "daterange.select": "Datumsbereich wählen",

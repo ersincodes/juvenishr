@@ -9,14 +9,7 @@ const SUPPORTED = ["tr", "de"] as const;
 
 // Initialize once in client. Prevent re-init in HMR.
 if (!i18n.isInitialized) {
-  // Match the server-rendered <html lang="..."> to avoid hydration mismatch
-  let initialLang = "tr";
-  if (typeof document !== "undefined") {
-    const htmlLang = document.documentElement.getAttribute("lang");
-    if (htmlLang && (SUPPORTED as readonly string[]).includes(htmlLang)) {
-      initialLang = htmlLang;
-    }
-  }
+  const initialLang = "tr";
   i18n
     .use(initReactI18next)
     .init({
