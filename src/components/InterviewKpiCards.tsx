@@ -142,7 +142,7 @@ const InterviewKpiCards = ({ rows, className }: Props) => {
       const phoneStatus = row["Phone Status"] as string | undefined;
       if (phoneStatus !== "Görüşme Ayarlandı") return;
 
-      const dateStr = row["Phone Date"]; // "YYYY-MM-DD"
+      const dateStr = row["F2F Date"]; // "YYYY-MM-DD"
       const date = parseDate(dateStr);
       if (!date) return;
 
